@@ -1,5 +1,7 @@
 use clap::Parser;
 
+mod command;
+
 #[derive(Parser)]
 #[command(author, version, about, long_about = None)]
 enum Cli {
