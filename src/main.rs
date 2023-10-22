@@ -1,6 +1,7 @@
 use clap::Parser;
 
 mod command;
+mod model;
 
 #[derive(Parser)]
 #[command(author, version, about, long_about = None)]
