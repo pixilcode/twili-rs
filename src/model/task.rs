@@ -1,8 +1,8 @@
 use chrono::{NaiveDate, NaiveTime};
 
 pub struct Task {
-	name: String,
-	due_date: NaiveDate,
-	due_time: Option<NaiveTime>,
-	complete: bool,
+	pub name: String,
+	pub due_date: NaiveDate,
+	pub due_time: Option<NaiveTime>,
+	pub complete: bool,
 }
