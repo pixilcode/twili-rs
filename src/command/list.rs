@@ -1,8 +1,8 @@
 use super::Config;
 
-struct ListConfig;
+pub struct ListConfig;
 
-fn run(config: Config<ListConfig>) {
+pub fn run(mut config: Config<ListConfig>) {
 	let tasks = config.task_manager.get_all_tasks();
 
 	// filter out completed tasks and sort by due date

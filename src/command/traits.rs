@@ -7,6 +7,6 @@ pub trait TaskManager {
 }
 
 pub trait Presenter {
-	fn display_tasks(&self, tasks: Vec<Task>);
-	fn edit_tasks(&self, tasks: Vec<TaskGroup>) -> Vec<TaskGroup>;
+	fn display_tasks(&mut self, tasks: Vec<Task>);
+	fn edit_tasks(&mut self, tasks: Vec<TaskGroup>) -> Vec<TaskGroup>;
 }

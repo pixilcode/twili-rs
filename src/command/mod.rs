@@ -2,7 +2,12 @@ use self::traits::{TaskManager, Presenter};
 
 mod edit;
 mod list;
-mod traits;
+pub mod traits;
+
+pub use edit::run as edit;
+pub use edit::EditConfig;
+pub use list::run as list;
+pub use list::ListConfig;
 
 pub struct Config<T> {
 	pub presenter: Box<dyn Presenter>,
