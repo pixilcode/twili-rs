@@ -9,6 +9,10 @@ impl InMemoryTaskManager {
 	pub fn new() -> Self {
 		Self { task_groups: vec![] }
 	}
+
+	pub fn new_from_groups(task_groups: Vec<TaskGroup>) -> Self {
+		Self { task_groups }
+	}
 }
 
 impl TaskManager for InMemoryTaskManager {
