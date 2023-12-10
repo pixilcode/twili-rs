@@ -16,7 +16,7 @@ pub struct Config<T> {
 }
 
 impl<T> Config<T> {
-	pub fn new<P, M, E>(presenter: P, task_manager: M, extended: T) -> Self
+	pub fn new<P, M>(presenter: P, task_manager: M, extended: T) -> Self
 	where
 		P: Presenter + 'static,
 		M: TaskManager + 'static,
