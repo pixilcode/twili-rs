@@ -23,5 +23,5 @@ where
 		.collect();
 	tasks.sort_by_key(|task| task.due_date);
 
-	config.presenter.display_tasks(tasks);
+	config.presenter.display_tasks(&tasks);
 }

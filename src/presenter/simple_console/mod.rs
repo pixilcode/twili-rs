@@ -36,7 +36,7 @@ where
 	I: BufRead,
 	O: Write,
 {
-	fn display_tasks(&mut self, tasks: Vec<Task>) {
+	fn display_tasks(&mut self, tasks: &[Task]) {
 		for task in tasks {
 			let task_string = self.task_formatter.format(&task);
 			writeln!(self.stdout, "{}", task_string).expect("Failed to write to stdout");
@@ -45,7 +45,7 @@ where
 		self.stdout.flush().unwrap();
 	}
 
-	fn edit_tasks(&mut self, tasks: Vec<Task>) -> Vec<Task> {
+	fn select_task<'a>(&mut self, tasks: &'a [Task]) -> &'a Task {
 		// Select a task
 		for (index, task) in tasks.iter().enumerate() {
 			let task_string = self.task_formatter.format(&task);
@@ -60,6 +60,10 @@ where
 
 		let selection = input.trim().parse::<usize>().expect("Failed to parse input");
 
+		&tasks[selection]
+	}
+
+	fn edit_task(&mut self, task: &Task) -> Task {
 		// Edit the task
 		let mut input = String::new();
 
@@ -86,21 +90,13 @@ where
 
 		let new_complete = input.trim().parse::<bool>().expect("Failed to parse input");
 
-		// Update the task
-		let mut new_task = tasks[selection].clone();
-
+		let mut new_task = task.clone();
 		new_task.name = new_name;
 		new_task.due_date = new_due_date;
 		new_task.complete = new_complete;
 
 		println!("{:?}", new_task);
-
-		let mut new_tasks = tasks.clone();
-
-		new_tasks[selection] = new_task;
-
-		println!("{:?}", new_tasks);
-
-		tasks
+		
+		new_task
 	}
 }

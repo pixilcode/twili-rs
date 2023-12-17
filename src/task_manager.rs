@@ -1,5 +1,5 @@
 use crate::command::traits::TaskManager;
-use crate::model::Task;
+use crate::model::{Task, TaskId};
 
 pub struct InMemoryTaskManager {
 	tasks: Vec<Task>,
@@ -16,7 +16,8 @@ impl TaskManager for InMemoryTaskManager {
 		self.tasks.clone()
     }
 
-    fn save_tasks(&mut self, tasks: Vec<Task>) {
-		self.tasks = tasks;
-    }
+	fn update_task(&mut self, task_id: &TaskId, task: Task) {
+		let task_index = self.tasks.iter().position(|t| &t.id == task_id).expect("Task not found");
+		self.tasks[task_index] = task;
+	}
 }

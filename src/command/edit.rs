@@ -14,6 +14,7 @@ where
 	M: TaskManager,
 {
 	let tasks = config.task_manager.get_all_tasks();
-	let tasks = config.presenter.edit_tasks(tasks);
-	config.task_manager.save_tasks(tasks);
+	let task = config.presenter.select_task(&tasks);
+	let new_task = config.presenter.edit_task(task);
+	config.task_manager.update_task(&task.id, new_task);
 }
