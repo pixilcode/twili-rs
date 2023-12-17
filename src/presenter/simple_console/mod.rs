@@ -39,6 +39,7 @@ where
 	fn display_tasks(&mut self, tasks: &[Task]) {
 		for task in tasks {
 			let task_string = self.task_formatter.format(&task);
+			// TODO: factor out printing
 			writeln!(self.stdout, "{}", task_string).expect("Failed to write to stdout");
 		}
 
@@ -49,11 +50,14 @@ where
 		// Select a task
 		for (index, task) in tasks.iter().enumerate() {
 			let task_string = self.task_formatter.format(&task);
+			// TODO: factor out printing
 			writeln!(self.stdout, "{}: {}", index, task_string).expect("Failed to write to stdout");
 		}
 
+		// TODO: factor out the prompt
 		let mut input = String::new();
 
+		// TODO: factor out printing
 		write!(self.stdout, "Enter your selection: ").expect("Failed to write to stdout");
 		self.stdout.flush().unwrap();
 		self.stdin.read_line(&mut input).expect("Failed to read from stdin");
@@ -65,16 +69,20 @@ where
 
 	fn edit_task(&mut self, task: &Task) -> Task {
 		// Edit the task
+		// TODO: factor out the prompt
 		let mut input = String::new();
 
+		// TODO: factor out printing
 		write!(self.stdout, "Enter the new name: ").expect("Failed to write to stdout");
 		self.stdout.flush().unwrap();
 		self.stdin.read_line(&mut input).expect("Failed to read from stdin");
 
 		let new_name = input.trim().to_string();
 
+		// TODO: factor out the prompt
 		let mut input = String::new();
 
+		// TODO: factor out printing
 		write!(self.stdout, "Enter the new due date: ").expect("Failed to write to stdout");
 		self.stdout.flush().unwrap();
 		self.stdin.read_line(&mut input).expect("Failed to read from stdin");
@@ -82,8 +90,10 @@ where
 		let new_due_date = input.trim();
 		let new_due_date = NaiveDate::parse_from_str(new_due_date, "%Y-%m-%d").expect("Failed to parse input");
 
+		// TODO: factor out the prompt
 		let mut input = String::new();
 
+		// TODO: factor out printing
 		write!(self.stdout, "Enter the new completion status: ").expect("Failed to write to stdout");
 		self.stdout.flush().unwrap();
 		self.stdin.read_line(&mut input).expect("Failed to read from stdin");

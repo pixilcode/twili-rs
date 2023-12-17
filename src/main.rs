@@ -16,6 +16,7 @@ enum Cli {
 fn main() {
     let cli = Cli::parse();
 
+    // TODO: use a real task manager
     let task_manager = task_manager::InMemoryTaskManager::new_from_list(
         vec![
             model::Task {
@@ -68,5 +69,6 @@ fn main() {
             );
             command::edit(config);
         }
+        // TODO: add an 'interactive session' command
     }
 }
