@@ -6,10 +6,6 @@ pub struct InMemoryTaskManager {
 }
 
 impl InMemoryTaskManager {
-	pub fn new() -> Self {
-		Self { tasks: vec![] }
-	}
-
 	pub fn new_from_list(tasks: Vec<Task>) -> Self {
 		Self { tasks }
 	}
