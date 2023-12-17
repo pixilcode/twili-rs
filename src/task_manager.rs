@@ -12,7 +12,7 @@ impl InMemoryTaskManager {
 }
 
 impl TaskManager for InMemoryTaskManager {
-    fn get_all_tasks(&self) -> Vec<Task> {
+    fn get_all_tasks(&mut self) -> Vec<Task> {
 		self.tasks.clone()
     }
 
