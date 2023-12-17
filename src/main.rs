@@ -59,10 +59,12 @@ fn main() {
         ]
     );
 
+    use crate::presenter::simple_console::*;
+
     match cli {
         Cli::List => {
             let config = command::Config::new(
-                presenter::console::Presenter::new(presenter::console::TaskFormatter::Basic),
+                Presenter::new(TaskFormatter::Basic),
                 task_manager,
                 command::ListConfig,
             );
@@ -70,7 +72,7 @@ fn main() {
         }
         Cli::Edit => {
             let config = command::Config::new(
-                presenter::console::Presenter::new(presenter::console::TaskFormatter::Basic),
+                Presenter::new(TaskFormatter::Basic),
                 task_manager,
                 command::EditConfig,
             );
