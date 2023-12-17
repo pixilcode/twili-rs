@@ -117,18 +117,8 @@ where
 
 		new_tasks[selection] = new_task;
 
+		println!("{:?}", new_tasks);
+
 		tasks
-	}
-}
-
-#[cfg(test)]
-mod tests {
-	use crate::presenter;
-
-use super::*;
-
-	#[test]
-	fn test_basic_task_formatter() {
-		// let presenter = Presenter::new_with_streams(TaskFormatter::Basic, String::new(), String::new());
 	}
 }
