@@ -1,17 +1,17 @@
-use crate::command::traits::TaskManager;
+use crate::command::traits::TaskDao;
 use crate::model::{Task, TaskId};
 
-pub struct InMemoryTaskManager {
+pub struct InMemoryTaskDao {
 	tasks: Vec<Task>,
 }
 
-impl InMemoryTaskManager {
+impl InMemoryTaskDao {
 	pub fn new_from_list(tasks: Vec<Task>) -> Self {
 		Self { tasks }
 	}
 }
 
-impl TaskManager for InMemoryTaskManager {
+impl TaskDao for InMemoryTaskDao {
     fn get_all_tasks(&mut self) -> Vec<Task> {
 		self.tasks.clone()
     }

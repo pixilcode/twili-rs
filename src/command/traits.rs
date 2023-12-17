@@ -1,6 +1,6 @@
 use crate::model::{Task, TaskId};
 
-pub trait TaskManager {
+pub trait TaskDao {
 	fn get_all_tasks(&mut self) -> Vec<Task>;
 	fn update_task(&mut self, task_id: &TaskId, task: Task);
 }

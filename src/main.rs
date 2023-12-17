@@ -4,7 +4,7 @@ use clap::Parser;
 mod command;
 mod model;
 mod presenter;
-mod task_manager;
+mod dao;
 
 #[derive(Parser)]
 #[command(author, version, about, long_about = None)]
@@ -17,7 +17,7 @@ fn main() {
     let cli = Cli::parse();
 
     // TODO: use a real task manager
-    let task_manager = task_manager::InMemoryTaskManager::new_from_list(
+    let task_dao = dao::task_dao::InMemoryTaskDao::new_from_list(
         vec![
             model::Task {
                 id: "buy-milk".to_string(),
@@ -56,7 +56,7 @@ fn main() {
         Cli::List => {
             let config = command::Config::new(
                 Presenter::new(TaskFormatter::Basic),
-                task_manager,
+                task_dao,
                 command::ListConfig,
             );
             command::list(config);
@@ -64,7 +64,7 @@ fn main() {
         Cli::Edit => {
             let config = command::Config::new(
                 Presenter::new(TaskFormatter::Basic),
-                task_manager,
+                task_dao,
                 command::EditConfig,
             );
             command::edit(config);
