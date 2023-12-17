@@ -8,7 +8,7 @@ use super::{
 
 pub struct EditConfig;
 
-pub fn run<P, M>(mut config: Config<P, M, EditConfig>)
+pub fn run<P, M>(config: &mut Config<P, M, EditConfig>)
 where
 	P: Presenter,
 	M: TaskDao,

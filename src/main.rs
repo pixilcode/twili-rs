@@ -54,20 +54,20 @@ fn main() {
 
     match cli {
         Cli::List => {
-            let config = command::Config::new(
+            let mut config = command::Config::new(
                 Presenter::new(TaskFormatter::Basic),
                 task_dao,
                 command::ListConfig,
             );
-            command::list(config);
+            command::list(&mut config);
         }
         Cli::Edit => {
-            let config = command::Config::new(
+            let mut config = command::Config::new(
                 Presenter::new(TaskFormatter::Basic),
                 task_dao,
                 command::EditConfig,
             );
-            command::edit(config);
+            command::edit(&mut config);
         }
         // TODO: add an 'interactive session' command
     }
