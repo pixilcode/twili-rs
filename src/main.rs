@@ -11,6 +11,7 @@ mod dao;
 enum Cli {
     List,
     Edit,
+    Interact,
 }
 
 fn main() {
@@ -68,6 +69,14 @@ fn main() {
                 command::EditConfig,
             );
             command::edit(&mut config);
+        }
+        Cli::Interact => {
+            let mut config = command::Config::new(
+                Presenter::new(TaskFormatter::Basic),
+                task_dao,
+                command::InteractConfig,
+            );
+            command::interact(&mut config);
         }
         // TODO: add an 'interactive session' command
     }

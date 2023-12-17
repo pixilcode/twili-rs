@@ -1,11 +1,14 @@
 use self::traits::{TaskDao, Presenter};
 
 mod edit;
+mod interact;
 mod list;
 pub mod traits;
 
 pub use edit::run as edit;
 pub use edit::EditConfig;
+pub use interact::run as interact;
+pub use interact::InteractConfig;
 pub use list::run as list;
 pub use list::ListConfig;
 
