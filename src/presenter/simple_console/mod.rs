@@ -31,24 +31,6 @@ impl Presenter<BufReader<Stdin>, Stdout> {
 	}
 }
 
-impl<I, O> Presenter<I, O>
-where
-	I: BufRead,
-	O: Write,
-{
-	pub fn new_with_streams(
-		formatter: TaskFormatter,
-		stdin: I,
-		stdout: O,
-	) -> Self {
-		Self {
-			stdin,
-			stdout,
-			task_formatter: formatter,
-		}
-	}
-}
-
 impl<I, O> PresenterTrait for Presenter<I, O>
 where
 	I: BufRead,
