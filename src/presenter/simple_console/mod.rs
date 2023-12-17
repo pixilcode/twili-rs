@@ -2,29 +2,58 @@ use chrono::NaiveDate;
 
 use crate::model::Task;
 use crate::command::traits::Presenter as PresenterTrait;
-use std::io::{Stdout, Stdin, Write};
+use std::io::{Stdin, Stdout, Write, BufRead, BufReader};
 
 pub use self::task_formatter::TaskFormatter;
 
 mod task_formatter;
 
-pub struct Presenter {
-	stdout: Stdout,
-	stdin: Stdin,
+pub struct Presenter<I, O>
+where
+	I: BufRead,
+	O: Write,
+{
+	stdin: I,
+	stdout: O,
 	task_formatter: TaskFormatter,
 }
 
-impl Presenter {
-	pub fn new(formatter: TaskFormatter) -> Self {
+impl Presenter<BufReader<Stdin>, Stdout> {
+	pub fn new(formatter: TaskFormatter) -> Presenter<BufReader<Stdin>, Stdout> {
+		let stdin = BufReader::new(std::io::stdin());
+		let stdout = std::io::stdout();
+
 		Self {
-			stdout: std::io::stdout(),
-			stdin: std::io::stdin(),
+			stdin,
+			stdout,
 			task_formatter: formatter,
 		}
 	}
 }
 
-impl PresenterTrait for Presenter {
+impl<I, O> Presenter<I, O>
+where
+	I: BufRead,
+	O: Write,
+{
+	pub fn new_with_streams(
+		formatter: TaskFormatter,
+		stdin: I,
+		stdout: O,
+	) -> Self {
+		Self {
+			stdin,
+			stdout,
+			task_formatter: formatter,
+		}
+	}
+}
+
+impl<I, O> PresenterTrait for Presenter<I, O>
+where
+	I: BufRead,
+	O: Write,
+{
 	fn display_tasks(&mut self, tasks: Vec<Task>) {
 		for task in tasks {
 			let task_string = self.task_formatter.format(&task);
@@ -89,5 +118,17 @@ impl PresenterTrait for Presenter {
 		new_tasks[selection] = new_task;
 
 		tasks
+	}
+}
+
+#[cfg(test)]
+mod tests {
+	use crate::presenter;
+
+use super::*;
+
+	#[test]
+	fn test_basic_task_formatter() {
+		// let presenter = Presenter::new_with_streams(TaskFormatter::Basic, String::new(), String::new());
 	}
 }
