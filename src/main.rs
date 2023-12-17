@@ -16,47 +16,37 @@ enum Cli {
 fn main() {
     let cli = Cli::parse();
 
-    let task_manager = task_manager::InMemoryTaskManager::new_from_groups(
+    let task_manager = task_manager::InMemoryTaskManager::new_from_list(
         vec![
-            model::TaskGroup {
-                name: "Food A".to_string(),
-                tasks: vec![
-                    model::Task {
-                        id: "buy-milk".to_string(),
-                        name: "Buy milk".to_string(),
-                        due_date: NaiveDate::from_ymd_opt(2021, 7, 31).unwrap(),
-                        due_time: None,
-                        complete: false,
-                    },
-                    model::Task {
-                        id: "buy-cheese".to_string(),
-                        name: "Buy cheese".to_string(),
-                        due_date: NaiveDate::from_ymd_opt(2021, 8, 1).unwrap(),
-                        due_time: None,
-                        complete: false,
-                    },
-                ],
+            model::Task {
+                id: "buy-milk".to_string(),
+                name: "Buy milk".to_string(),
+                due_date: NaiveDate::from_ymd_opt(2021, 7, 31).unwrap(),
+                due_time: None,
+                complete: false,
             },
-            model::TaskGroup {
-                name: "Food B".to_string(),
-                tasks: vec![
-                    model::Task {
-                        id: "buy-bread".to_string(),
-                        name: "Buy bread".to_string(),
-                        due_date: NaiveDate::from_ymd_opt(2021, 8, 3).unwrap(),
-                        due_time: None,
-                        complete: false,
-                    },
-                    model::Task {
-                        id: "buy-butter".to_string(),
-                        name: "Buy butter".to_string(),
-                        due_date: NaiveDate::from_ymd_opt(2021, 8, 4).unwrap(),
-                        due_time: None,
-                        complete: false,
-                    },
-                ],
+            model::Task {
+                id: "buy-cheese".to_string(),
+                name: "Buy cheese".to_string(),
+                due_date: NaiveDate::from_ymd_opt(2021, 8, 1).unwrap(),
+                due_time: None,
+                complete: false,
             },
-        ]
+            model::Task {
+                id: "buy-bread".to_string(),
+                name: "Buy bread".to_string(),
+                due_date: NaiveDate::from_ymd_opt(2021, 8, 3).unwrap(),
+                due_time: None,
+                complete: false,
+            },
+            model::Task {
+                id: "buy-butter".to_string(),
+                name: "Buy butter".to_string(),
+                due_date: NaiveDate::from_ymd_opt(2021, 8, 4).unwrap(),
+                due_time: None,
+                complete: false,
+            },
+        ],
     );
 
     use crate::presenter::simple_console::*;
