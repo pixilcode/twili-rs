@@ -9,21 +9,21 @@ pub use edit::EditConfig;
 pub use list::run as list;
 pub use list::ListConfig;
 
-pub struct Config<T> {
-	pub presenter: Box<dyn Presenter>,
-	pub task_manager: Box<dyn TaskManager>,
+pub struct Config<P, M, T> {
+	pub presenter: P,
+	pub task_manager: M,
 	pub extended: T,
 }
 
-impl<T> Config<T> {
-	pub fn new<P, M>(presenter: P, task_manager: M, extended: T) -> Self
+impl<P, M, T> Config<P, M, T> {
+	pub fn new(presenter: P, task_manager: M, extended: T) -> Self
 	where
 		P: Presenter + 'static,
 		M: TaskManager + 'static,
 	{
 		Self {
-			presenter: Box::new(presenter),
-			task_manager: Box::new(task_manager),
+			presenter: presenter,
+			task_manager: task_manager,
 			extended,
 		}
 	}
