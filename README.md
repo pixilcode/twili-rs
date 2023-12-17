@@ -11,7 +11,6 @@ Certain tools are used for development.
 The Rust programming language is used for the project. The latest stable version
 is used.
 
-
 ### ADR
 
 Architecture decision records are used to document the decisions made during
