@@ -6,6 +6,7 @@ mod model;
 mod presenter;
 mod dao;
 
+// TODO: action is optional, default to `interact`
 #[derive(Parser)]
 #[command(author, version, about, long_about = None)]
 enum Cli {
