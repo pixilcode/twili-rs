@@ -1,4 +1,4 @@
-use chrono::NaiveDate;
+use chrono::{NaiveDate, format::format};
 
 use crate::model::Task;
 use crate::command::traits::Presenter as PresenterTrait;
@@ -31,6 +31,27 @@ impl Presenter<BufReader<Stdin>, Stdout> {
 	}
 }
 
+impl<I, O> Presenter<I, O>
+where
+	I: BufRead,
+	O: Write,
+{
+	fn println(&mut self, s: impl AsRef<str>) {
+		// TODO: handle errors better
+		writeln!(self.stdout, "{}", s.as_ref()).expect("Failed to write to stdout");
+	}
+
+	fn print(&mut self, s: impl AsRef<str>) {
+		// TODO: handle errors better
+		write!(self.stdout, "{}", s.as_ref()).expect("Failed to write to stdout");
+	}
+
+	fn flush_stdout(&mut self) {
+		// TODO: handle errors better
+		self.stdout.flush().expect("Failed to flush stdout");
+	}
+}
+
 impl<I, O> PresenterTrait for Presenter<I, O>
 where
 	I: BufRead,
@@ -40,26 +61,24 @@ where
 		for task in tasks {
 			let task_string = self.task_formatter.format(&task);
 			// TODO: factor out printing
-			writeln!(self.stdout, "{}", task_string).expect("Failed to write to stdout");
+			self.println(task_string);
 		}
 
-		self.stdout.flush().unwrap();
+		self.flush_stdout();
 	}
 
 	fn select_task<'a>(&mut self, tasks: &'a [Task]) -> &'a Task {
 		// Select a task
 		for (index, task) in tasks.iter().enumerate() {
 			let task_string = self.task_formatter.format(&task);
-			// TODO: factor out printing
-			writeln!(self.stdout, "{}: {}", index, task_string).expect("Failed to write to stdout");
+			self.println(format!("{}: {}", index, task_string));
 		}
 
 		// TODO: factor out the prompt
 		let mut input = String::new();
 
-		// TODO: factor out printing
-		write!(self.stdout, "Enter your selection: ").expect("Failed to write to stdout");
-		self.stdout.flush().unwrap();
+		self.print("Enter your selection: ");
+		self.flush_stdout();
 		self.stdin.read_line(&mut input).expect("Failed to read from stdin");
 
 		let selection = input.trim().parse::<usize>().expect("Failed to parse input");
@@ -73,7 +92,7 @@ where
 		let mut input = String::new();
 
 		// TODO: factor out printing
-		write!(self.stdout, "Enter the new name: ").expect("Failed to write to stdout");
+		self.print("Enter the new name: ");
 		self.stdout.flush().unwrap();
 		self.stdin.read_line(&mut input).expect("Failed to read from stdin");
 
@@ -83,8 +102,8 @@ where
 		let mut input = String::new();
 
 		// TODO: factor out printing
-		write!(self.stdout, "Enter the new due date: ").expect("Failed to write to stdout");
-		self.stdout.flush().unwrap();
+		self.print("Enter the new due date: ");
+		self.flush_stdout();
 		self.stdin.read_line(&mut input).expect("Failed to read from stdin");
 
 		let new_due_date = input.trim();
@@ -94,7 +113,7 @@ where
 		let mut input = String::new();
 
 		// TODO: factor out printing
-		write!(self.stdout, "Enter the new completion status: ").expect("Failed to write to stdout");
+		self.print("Enter the new completion status: ");
 		self.stdout.flush().unwrap();
 		self.stdin.read_line(&mut input).expect("Failed to read from stdin");
 
@@ -105,8 +124,7 @@ where
 		new_task.due_date = new_due_date;
 		new_task.complete = new_complete;
 
-		println!("{:?}", new_task);
-		
 		new_task
 	}
+
 }
