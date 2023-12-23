@@ -60,7 +60,6 @@ where
 	fn display_tasks(&mut self, tasks: &[Task]) {
 		for task in tasks {
 			let task_string = self.task_formatter.format(&task);
-			// TODO: factor out printing
 			self.println(task_string);
 		}
 
@@ -91,7 +90,6 @@ where
 		// TODO: factor out the prompt
 		let mut input = String::new();
 
-		// TODO: factor out printing
 		self.print("Enter the new name: ");
 		self.stdout.flush().unwrap();
 		self.stdin.read_line(&mut input).expect("Failed to read from stdin");
@@ -101,7 +99,6 @@ where
 		// TODO: factor out the prompt
 		let mut input = String::new();
 
-		// TODO: factor out printing
 		self.print("Enter the new due date: ");
 		self.flush_stdout();
 		self.stdin.read_line(&mut input).expect("Failed to read from stdin");
@@ -112,7 +109,6 @@ where
 		// TODO: factor out the prompt
 		let mut input = String::new();
 
-		// TODO: factor out printing
 		self.print("Enter the new completion status: ");
 		self.stdout.flush().unwrap();
 		self.stdin.read_line(&mut input).expect("Failed to read from stdin");
