@@ -125,6 +125,7 @@ where
 		let curr_due_date = task.due_date;
 		let due_date_prompt = format!("Enter the new due date as YYYY-MM-DD (leave empty for '{curr_due_date}')");
 		let new_due_date = self.prompt_then(due_date_prompt, |input| {
+			// TODO: figure out how to make the `prompt_or_default` more abstract
 			if input.is_empty() { return curr_due_date }
 			let trimmed_input = input.trim();
 			NaiveDate::parse_from_str(trimmed_input, "%Y-%m-%d").expect("Failed to parse input")
