@@ -1,8 +1,8 @@
-use chrono::{NaiveDate, format::format};
+use chrono::NaiveDate;
 
 use crate::model::Task;
 use crate::command::traits::Presenter as PresenterTrait;
-use std::io::{Stdin, Stdout, Write, BufRead, BufReader};
+use std::{io::{Stdin, Stdout, Write, BufRead, BufReader}, str::FromStr, fmt::Display};
 
 pub use self::task_formatter::TaskFormatter;
 
@@ -36,19 +36,57 @@ where
 	I: BufRead,
 	O: Write,
 {
-	fn println(&mut self, s: impl AsRef<str>) {
+	fn println(&mut self, output: impl AsRef<str>) {
 		// TODO: handle errors better
-		writeln!(self.stdout, "{}", s.as_ref()).expect("Failed to write to stdout");
+		writeln!(self.stdout, "{}", output.as_ref()).expect("Failed to write to stdout");
 	}
 
-	fn print(&mut self, s: impl AsRef<str>) {
+	fn print(&mut self, output: impl AsRef<str>) {
 		// TODO: handle errors better
-		write!(self.stdout, "{}", s.as_ref()).expect("Failed to write to stdout");
+		write!(self.stdout, "{}", output.as_ref()).expect("Failed to write to stdout");
 	}
 
 	fn flush_stdout(&mut self) {
 		// TODO: handle errors better
 		self.stdout.flush().expect("Failed to flush stdout");
+	}
+
+	fn prompt_then<T, F>(&mut self, prompt: impl AsRef<str>, transform: F) -> T
+	where
+		F: FnOnce(String) -> T
+	{
+		let prompt = prompt.as_ref();
+		let prompt = format!("{prompt}: ");
+		let mut input = String::new();
+
+		self.print(prompt);
+		self.flush_stdout();
+
+		self.stdin.read_line(&mut input).expect("Failed to read from stdin");
+
+		transform(input)
+	}
+
+	fn prompt_opt<T>(&mut self, prompt: impl AsRef<str>) -> Option<T>
+	where
+		T: FromStr
+	{
+		self.prompt_then(prompt, |result| result.parse().ok())
+	}
+
+	fn prompt_or_default<T>(&mut self, prompt: impl AsRef<str>, default: T) -> T
+	where
+		T: Display + FromStr
+	{
+		let prompt = prompt.as_ref();
+		let prompt = format!("{prompt} (leave empty for '{default})");
+		self.prompt_then(prompt, |result| {
+			if result.is_empty() {
+				default
+			} else {
+				result.parse().unwrap_or_else(|_| panic!("Failed to parse input!"))
+			}
+		})
 	}
 }
 
@@ -73,48 +111,27 @@ where
 			self.println(format!("{}: {}", index, task_string));
 		}
 
-		// TODO: factor out the prompt
-		let mut input = String::new();
+		let selection = self.prompt_opt::<usize>("Enter your selection");
 
-		self.print("Enter your selection: ");
-		self.flush_stdout();
-		self.stdin.read_line(&mut input).expect("Failed to read from stdin");
-
-		let selection = input.trim().parse::<usize>().expect("Failed to parse input");
+		// TODO: better error handling
+		let selection = selection.expect("Failed to parse");
 
 		&tasks[selection]
 	}
 
 	fn edit_task(&mut self, task: &Task) -> Task {
-		// Edit the task
-		// TODO: factor out the prompt
-		let mut input = String::new();
+		let new_name = self.prompt_or_default::<String>("Enter the new name", task.name.clone());
 
-		self.print("Enter the new name: ");
-		self.stdout.flush().unwrap();
-		self.stdin.read_line(&mut input).expect("Failed to read from stdin");
+		let curr_due_date = task.due_date;
+		let due_date_prompt = format!("Enter the new due date as YYYY-MM-DD (leave empty for '{curr_due_date}')");
+		let new_due_date = self.prompt_then(due_date_prompt, |input| {
+			if input.is_empty() { return curr_due_date }
+			let trimmed_input = input.trim();
+			NaiveDate::parse_from_str(trimmed_input, "%Y-%m-%d").expect("Failed to parse input")
+		});
 
-		let new_name = input.trim().to_string();
-
-		// TODO: factor out the prompt
-		let mut input = String::new();
-
-		self.print("Enter the new due date: ");
-		self.flush_stdout();
-		self.stdin.read_line(&mut input).expect("Failed to read from stdin");
-
-		let new_due_date = input.trim();
-		let new_due_date = NaiveDate::parse_from_str(new_due_date, "%Y-%m-%d").expect("Failed to parse input");
-
-		// TODO: factor out the prompt
-		let mut input = String::new();
-
-		self.print("Enter the new completion status: ");
-		self.stdout.flush().unwrap();
-		self.stdin.read_line(&mut input).expect("Failed to read from stdin");
-
-		let new_complete = input.trim().parse::<bool>().expect("Failed to parse input");
-
+		let new_complete = self.prompt_or_default("Enter the new completion status", task.complete);
+		
 		let mut new_task = task.clone();
 		new_task.name = new_name;
 		new_task.due_date = new_due_date;
