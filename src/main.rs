@@ -16,10 +16,14 @@ enum Cli {
 }
 
 fn main() {
+
+    let task_dao = dao::sqlite::SqliteTaskDao::new_from_path("tasks.db");
+
+    /*
     let cli = Cli::parse();
 
     // TODO: use a real task manager
-    let task_dao = dao::task_dao::InMemoryTaskDao::new_from_list(
+    let task_dao = dao::in_memory::InMemoryTaskDao::new_from_list(
         vec![
             model::Task {
                 id: "buy-milk".to_string(),
@@ -81,4 +85,5 @@ fn main() {
         }
         // TODO: add an 'interactive session' command
     }
+    */
 }
