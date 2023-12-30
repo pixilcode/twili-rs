@@ -79,7 +79,7 @@ where
 		T: Display + FromStr
 	{
 		let prompt = prompt.as_ref();
-		let prompt = format!("{prompt} (leave empty for '{default})");
+		let prompt = format!("{prompt} (leave empty for '{default}')");
 		self.prompt_then(prompt, |result| {
 			if result.is_empty() {
 				default
