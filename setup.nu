@@ -6,6 +6,9 @@ sudo apt install adr-tools
 ## Install the diesel cli (specifically for SQLite)
 cargo install diesel_cli --no-default-features --features sqlite-bundled
 
+## Setup the database url for use with .env
+echo "DATABASE_URL=./db/test.db" | save .env
+
 ## Create a local database
 diesel setup --database-url ./db/test.db
 
