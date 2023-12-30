@@ -1,4 +1,3 @@
-use chrono::NaiveDate;
 use clap::Parser;
 
 mod command;
@@ -16,8 +15,14 @@ enum Cli {
 }
 
 fn main() {
+    #[cfg(debug_assertions)]
+    {
+        // Only load .env in debug mode
+        // TODO: better error handling
+        dotenvy::dotenv().ok();
+    }
 
-    let task_dao = dao::sqlite::SqliteTaskDao::new_from_path("tasks.db");
+    let task_dao = dao::sqlite::SqliteTaskDao::new_from_path("./test/test.db");
 
     /*
     let cli = Cli::parse();
