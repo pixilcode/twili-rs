@@ -1,9 +1,14 @@
+use std::{env, path::PathBuf};
+
 use clap::Parser;
+use command::traits::TaskDao;
 
 mod command;
 mod model;
 mod presenter;
 mod dao;
+
+const VERSION: &'static str = env!("CARGO_PKG_VERSION");
 
 // TODO: action is optional, default to `interact`
 #[derive(Parser)]
@@ -12,6 +17,7 @@ enum Cli {
     List,
     Edit,
     Interact,
+    Version,
 }
 
 fn main() {
@@ -22,7 +28,14 @@ fn main() {
         dotenvy::dotenv().ok();
     }
 
-    let task_dao = dao::sqlite::SqliteTaskDao::new_from_path("./test/test.db");
+    let data_dir = default_data_directory();
+    let list_name = DEFAULT_LIST_NAME;
+
+    let mut task_dao = dao::sqlite::SqliteTaskDao::new(data_dir, list_name);
+
+    task_dao.get_all_tasks().iter().for_each(|task| {
+        println!("{:?}", task);
+    });
 
     /*
     let cli = Cli::parse();
@@ -92,3 +105,13 @@ fn main() {
     }
     */
 }
+
+
+// DEFAULTS
+
+fn default_data_directory() -> PathBuf {
+    let user_data_dir = dirs::data_local_dir();
+    user_data_dir.unwrap_or(".".into()).join(".twili")
+}
+
+const DEFAULT_LIST_NAME: &'static str = "default";
