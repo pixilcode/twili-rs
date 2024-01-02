@@ -1,5 +1,5 @@
 use crate::command::traits::TaskDao;
-use crate::model::{Task, TaskId};
+use crate::model::Task;
 
 pub struct InMemoryTaskDao {
 	tasks: Vec<Task>,
@@ -16,7 +16,8 @@ impl TaskDao for InMemoryTaskDao {
 		self.tasks.clone()
     }
 
-	fn update_task(&mut self, task_id: &TaskId, task: Task) {
+	fn update_task(&mut self, task: Task) {
+		let task_id = &task.id;
 		let task_index = self.tasks.iter().position(|t| &t.id == task_id).expect("Task not found");
 		self.tasks[task_index] = task;
 	}

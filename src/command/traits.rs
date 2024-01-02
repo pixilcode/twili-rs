@@ -2,7 +2,7 @@ use crate::model::{Task, TaskId};
 
 pub trait TaskDao {
 	fn get_all_tasks(&mut self) -> Vec<Task>;
-	fn update_task(&mut self, task_id: &TaskId, task: Task);
+	fn update_task(&mut self, task: Task);
 }
 
 pub trait Presenter {
